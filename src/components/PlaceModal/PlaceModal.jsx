@@ -7,6 +7,7 @@ const PlaceModal = ({ place, onClose }) => {
   const [nearbyPlaces, setNearbyPlaces] = useState([]);
   const [isLoadingNearby, setIsLoadingNearby] = useState(false);
   const [nearbyError, setNearbyError] = useState(false);
+  const [visibleNearbyCount, setVisibleNearbyCount] = useState(3);
 
   // Close popup when Escape is pressed
   useEffect(() => {
@@ -32,6 +33,7 @@ const PlaceModal = ({ place, onClose }) => {
     const fetchNearbyPlaces = async () => {
       setIsLoadingNearby(true);
       setNearbyPlaces([]);
+      setVisibleNearbyCount(3);
       setNearbyError(false);
 
       try {
@@ -42,13 +44,11 @@ const PlaceModal = ({ place, onClose }) => {
         );
 
         if (isActive) {
-          const filteredResults = results
-            .filter(
-              (item) =>
-                item.properties.name &&
-                item.properties.name.toLowerCase() !== place.name.toLowerCase()
-            )
-            .slice(0, 5);
+          const filteredResults = results.filter(
+            (item) =>
+              item.properties.name &&
+              item.properties.name.toLowerCase() !== place.name.toLowerCase()
+          );
 
           setNearbyPlaces(filteredResults);
         }
@@ -133,35 +133,48 @@ const PlaceModal = ({ place, onClose }) => {
           )}
 
           {!isLoadingNearby && !nearbyError && nearbyPlaces.length > 0 && (
-            <div className="place-modal__nearby-list">
-              {nearbyPlaces.map((item) => {
-                const details = item.properties;
-                const category = details.categories?.at(-1)?.split(".").pop();
+            <>
+              <div className="place-modal__nearby-list">
+                {nearbyPlaces.slice(0, visibleNearbyCount).map((item) => {
+                  const details = item.properties;
+                  const category = details.categories?.at(-1)?.split(".").pop();
 
-                return (
-                  <article className="nearby-place" key={details.place_id}>
-                    <h4 className="nearby-place__name">{details.name}</h4>
+                  return (
+                    <article className="nearby-place" key={details.place_id}>
+                      <h4 className="nearby-place__name">{details.name}</h4>
 
-                    <p className="nearby-place__category">
-                      {category || "Place of interest"}
-                    </p>
+                      <p className="nearby-place__category">
+                        {category || "Place of interest"}
+                      </p>
 
-                    <p className="nearby-place__address">
-                      {details.address_line2 || details.formatted}
-                    </p>
+                      <p className="nearby-place__address">
+                        {details.address_line2 || details.formatted}
+                      </p>
 
-                    <a
-                      className="nearby-place__link"
-                      href={`https://www.google.com/maps/search/?api=1&query=${details.lat},${details.lon}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      View on Google Maps ↗
-                    </a>
-                  </article>
-                );
-              })}
-            </div>
+                      <a
+                        className="nearby-place__link"
+                        href={`https://www.google.com/maps/search/?api=1&query=${details.lat},${details.lon}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View on Google Maps ↗
+                      </a>
+                    </article>
+                  );
+                })}
+              </div>
+
+              {visibleNearbyCount < nearbyPlaces.length && (
+                <button
+                  className="place-modal__show-more"
+                  onClick={() =>
+                    setVisibleNearbyCount((prevCount) => prevCount + 3)
+                  }
+                >
+                  Show more
+                </button>
+              )}
+            </>
           )}
         </section>
       </div>

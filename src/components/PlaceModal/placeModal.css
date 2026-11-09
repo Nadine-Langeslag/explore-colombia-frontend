@@ -148,6 +148,33 @@
   text-decoration: underline;
 }
 
+.place-modal__show-more {
+  display: block;
+  margin: 24px auto 8px;
+  padding: 12px 28px;
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.place-modal__show-more:hover {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+}
+
+.place-modal__show-more:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
 @media (max-width: 600px) {
   .place-modal__nearby-list {
     grid-template-columns: 1fr;

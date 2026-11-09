@@ -1,5 +1,7 @@
 import "./about.css";
 
+import colombianLandscape from "../../images/about/about-colombia-MagdalenaRiver.jpg";
+
 const About = () => {
   return (
     <main className="about">
@@ -28,13 +30,11 @@ const About = () => {
           </p>
         </div>
 
-        <div
-          className="about__image-placeholder"
-          role="img"
-          aria-label="Placeholder for a photograph of a Colombian landscape"
-        >
-          Colombian landscape
-        </div>
+        <img
+          src={colombianLandscape}
+          className="about__image"
+          alt="Magdalena River in Colombian landscape"
+        />
       </section>
     </main>
   );
