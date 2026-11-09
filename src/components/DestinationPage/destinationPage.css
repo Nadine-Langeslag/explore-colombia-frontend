@@ -1,0 +1,78 @@
+.destination-page__info {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 32px;
+  align-items: center;
+  width: calc(100% - 64px);
+  max-width: 1000px;
+  margin: 30px auto;
+}
+
+.destination-page__overview p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.destination-page__weather {
+  width: 100%;
+}
+
+.weather-card {
+  padding: 20px 24px;
+  border-radius: 16px;
+  background-color: #edf0df;
+  color: var(--color-primary);
+}
+
+.weather-card__title {
+  margin: 0 0 16px;
+  font-family: var(--font-heading);
+  font-size: 22px;
+}
+
+.weather-card__condition {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.weather-card__temperature {
+  margin: 0 0 12px;
+  font-family: var(--font-heading);
+  font-size: 34px;
+  font-weight: bold;
+}
+
+.weather-card__details {
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.weather-card__details p {
+  margin: 3px 0;
+}
+
+@media (max-width: 650px) {
+  .destination-page__info {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.destination-page__map {
+  display: block;
+  width: calc(100% - 32px);
+  max-width: 1100px;
+  height: 250px;
+  margin: 30px auto;
+  border: none;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  .destination-page > .hero,
+  .destination-page__overview {
+    width: calc(100% - 32px);
+  }
+}

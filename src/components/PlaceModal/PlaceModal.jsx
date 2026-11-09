@@ -1,0 +1,172 @@
+import "./placeModal.css";
+
+import { useEffect, useState } from "react";
+import { searchNearbyPlaces } from "../../utils/api.js";
+
+const PlaceModal = ({ place, onClose }) => {
+  const [nearbyPlaces, setNearbyPlaces] = useState([]);
+  const [isLoadingNearby, setIsLoadingNearby] = useState(false);
+  const [nearbyError, setNearbyError] = useState(false);
+
+  // Close popup when Escape is pressed
+  useEffect(() => {
+    const handleEscape = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [onClose]);
+
+  // Fetch nearby places around the selected attraction
+  useEffect(() => {
+    if (!place?.coordinates) return;
+
+    let isActive = true;
+
+    const fetchNearbyPlaces = async () => {
+      setIsLoadingNearby(true);
+      setNearbyPlaces([]);
+      setNearbyError(false);
+
+      try {
+        const results = await searchNearbyPlaces(
+          ["entertainment.museum"],
+          place.coordinates.lat,
+          place.coordinates.lon
+        );
+
+        if (isActive) {
+          const filteredResults = results
+            .filter(
+              (item) =>
+                item.properties.name &&
+                item.properties.name.toLowerCase() !== place.name.toLowerCase()
+            )
+            .slice(0, 5);
+
+          setNearbyPlaces(filteredResults);
+        }
+      } catch (error) {
+        console.error("Unable to load nearby places:", error);
+
+        if (isActive) {
+          setNearbyError(true);
+        }
+      } finally {
+        if (isActive) {
+          setIsLoadingNearby(false);
+        }
+      }
+    };
+
+    fetchNearbyPlaces();
+
+    return () => {
+      isActive = false;
+    };
+  }, [place]);
+
+  if (!place) {
+    return null;
+  }
+
+  return (
+    <div className="place-modal" onClick={onClose}>
+      <button
+        className="place-modal__close"
+        onClick={onClose}
+        aria-label="Close modal"
+      >
+        &times;
+      </button>
+
+      <div
+        className="place-modal__content"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <img
+          src={place.image}
+          alt={place.name}
+          className="place-modal__image"
+        />
+
+        <div className="place-modal__details">
+          <h2 className="place-modal__title">{place.name}</h2>
+          <p className="place-modal__category">{place.category}</p>
+          <p className="place-modal__description">{place.description}</p>
+        </div>
+
+        <iframe
+          src={`https://www.google.com/maps?q=${place.coordinates.lat},${place.coordinates.lon}&output=embed`}
+          title={`Map showing ${place.name}`}
+          loading="lazy"
+          className="place-modal__map"
+        />
+
+        <section className="place-modal__nearby">
+          <h3 className="place-modal__nearby-title">
+            Other places of interest nearby
+          </h3>
+
+          {isLoadingNearby && (
+            <p className="place-modal__nearby-message">
+              Finding nearby places...
+            </p>
+          )}
+
+          {nearbyError && (
+            <p className="place-modal__nearby-message">
+              We couldn't load nearby places. Please try again later.
+            </p>
+          )}
+
+          {!isLoadingNearby && !nearbyError && nearbyPlaces.length === 0 && (
+            <p className="place-modal__nearby-message">
+              No nearby places were found.
+            </p>
+          )}
+
+          {!isLoadingNearby && !nearbyError && nearbyPlaces.length > 0 && (
+            <div className="place-modal__nearby-list">
+              {nearbyPlaces.map((item) => {
+                const details = item.properties;
+                const category = details.categories?.at(-1)?.split(".").pop();
+
+                return (
+                  <article className="nearby-place" key={details.place_id}>
+                    <h4 className="nearby-place__name">{details.name}</h4>
+
+                    <p className="nearby-place__category">
+                      {category || "Place of interest"}
+                    </p>
+
+                    <p className="nearby-place__address">
+                      {details.address_line2 || details.formatted}
+                    </p>
+
+                    <a
+                      className="nearby-place__link"
+                      href={`https://www.google.com/maps/search/?api=1&query=${details.lat},${details.lon}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View on Google Maps ↗
+                    </a>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </section>
+      </div>
+    </div>
+  );
+};
+
+export default PlaceModal;

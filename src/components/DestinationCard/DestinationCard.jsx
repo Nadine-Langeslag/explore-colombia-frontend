@@ -1,6 +1,7 @@
 import "./destinationCard.css";
 import { useState } from "react";
 import { Bookmark } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const DestinationCard = ({ destination }) => {
   const [isSaved, setIsSaved] = useState(false);
@@ -17,13 +18,19 @@ const DestinationCard = ({ destination }) => {
       >
         <Bookmark size={24} fill={isSaved ? "currentColor" : "none"} />
       </button>
-      <img
-        src={destination.image}
-        alt={destination.name}
-        className="destination-image"
-      />
-      <h3 className="destination-name">{destination.name}</h3>
-      <p className="destination-description">{destination.description}</p>
+
+      <Link
+        to={`/destinations/${destination.id}`}
+        className="destination-card__link"
+      >
+        <img
+          src={destination.image}
+          alt={destination.name}
+          className="destination-image"
+        />
+        <h3 className="destination-name">{destination.name}</h3>
+        <p className="destination-description">{destination.description}</p>
+      </Link>
     </article>
   );
 };
