@@ -4,6 +4,22 @@
   gap: 24px;
   padding: 40px;
 }
+
+.places__error {
+  max-width: 520px;
+  margin: 0 60px 24px;
+  padding: 14px 18px;
+  color: #72501c;
+  background-color: #f5ead2;
+  border: 1px solid #d9b978;
+  border-left: 4px solid #b68a3a;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+}
+
 @media (max-width: 900px) {
   .places {
     grid-template-columns: repeat(2, 1fr);

@@ -8,6 +8,7 @@ const PlaceModal = ({ place, onClose }) => {
   const [isLoadingNearby, setIsLoadingNearby] = useState(false);
   const [nearbyError, setNearbyError] = useState(false);
   const [visibleNearbyCount, setVisibleNearbyCount] = useState(3);
+  const [retryCount, setRetryCount] = useState(0);
 
   // Close popup when Escape is pressed
   useEffect(() => {
@@ -70,7 +71,7 @@ const PlaceModal = ({ place, onClose }) => {
     return () => {
       isActive = false;
     };
-  }, [place]);
+  }, [place, retryCount]);
 
   if (!place) {
     return null;
@@ -121,9 +122,19 @@ const PlaceModal = ({ place, onClose }) => {
           )}
 
           {nearbyError && (
-            <p className="place-modal__nearby-message">
-              We couldn't load nearby places. Please try again later.
-            </p>
+            <div className="place-modal__nearby-error">
+              <p role="alert">
+                We couldn't load nearby places. Please try again.
+              </p>
+
+              <button
+                type="button"
+                className="place-modal__retry-button"
+                onClick={() => setRetryCount((prevCount) => prevCount + 1)}
+              >
+                Try again
+              </button>
+            </div>
           )}
 
           {!isLoadingNearby && !nearbyError && nearbyPlaces.length === 0 && (

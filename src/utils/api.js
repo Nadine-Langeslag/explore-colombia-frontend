@@ -18,6 +18,10 @@ export const getPlaceCoordinates = async (placeName, city) => {
 
   const data = await response.json();
 
+  if (!data.results.length) {
+    throw new Error(`Location not found: ${placeName}`);
+  }
+
   return data.results[0];
 };
 

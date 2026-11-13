@@ -3,13 +3,32 @@
   display: flex;
   align-items: center;
   padding: 60px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   background-color: var(--color-primary);
   background-size: cover;
   background-position: center;
   border-radius: 8px;
 }
 
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(20, 48, 34, 0.35) 0%,
+    rgba(20, 48, 34, 0.15) 40%,
+    rgba(20, 48, 34, 0.02) 75%,
+    transparent 100%
+  );
+  z-index: 0;
+}
+
 .hero__content {
+  position: relative;
+  z-index: 1;
   max-width: 600px;
   color: #ffffff;
 }
