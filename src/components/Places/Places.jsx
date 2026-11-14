@@ -14,14 +14,16 @@ const Places = ({ destinationId, destinationName }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const destinationPlaces = places.filter(
-    (place) => place.destination === destinationId
-  );
   useEffect(() => {
     const fetchPlaceCoordinates = async () => {
       setError("");
       setIsLoading(true);
+
       try {
+        const destinationPlaces = places.filter(
+          (place) => place.destination === destinationId
+        );
+
         const results = await Promise.allSettled(
           destinationPlaces.map(async (place) => {
             const location = await getPlaceCoordinates(
@@ -38,6 +40,7 @@ const Places = ({ destinationId, destinationName }) => {
             };
           })
         );
+
         const updatedPlaces = results
           .filter((result) => result.status === "fulfilled")
           .map((result) => result.value);
@@ -69,6 +72,7 @@ const Places = ({ destinationId, destinationName }) => {
 
     fetchPlaceCoordinates();
   }, [destinationId, destinationName]);
+
   /* console.log("Places with coordinates:", placesWithCoordinates); */
 
   if (isLoading) {
@@ -82,6 +86,7 @@ const Places = ({ destinationId, destinationName }) => {
           {error}
         </p>
       )}
+
       <section className="places">
         {placesWithCoordinates.map((place) => (
           <PlaceCard

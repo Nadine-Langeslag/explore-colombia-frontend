@@ -1,6 +1,6 @@
 import "./placeModal.css";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { searchNearbyPlaces } from "../../utils/api.js";
 
 const PlaceModal = ({ place, onClose }) => {
@@ -9,6 +9,7 @@ const PlaceModal = ({ place, onClose }) => {
   const [nearbyError, setNearbyError] = useState(false);
   const [visibleNearbyCount, setVisibleNearbyCount] = useState(3);
   const [retryCount, setRetryCount] = useState(0);
+  const modalRef = useRef(null);
 
   // Close popup when Escape is pressed
   useEffect(() => {
@@ -73,12 +74,63 @@ const PlaceModal = ({ place, onClose }) => {
     };
   }, [place, retryCount]);
 
+  // Keep keyboard focus inside the modal
+  useEffect(() => {
+    const modal = modalRef.current;
+
+    if (!modal) return;
+
+    const previouslyFocusedElement = document.activeElement;
+
+    const getFocusableElements = () =>
+      modal.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+
+    const focusableElements = getFocusableElements();
+    const firstElement = focusableElements[0];
+
+    firstElement?.focus();
+
+    const handleTabKey = (event) => {
+      if (event.key !== "Tab") return;
+
+      const elements = getFocusableElements();
+      const first = elements[0];
+      const last = elements[elements.length - 1];
+
+      if (!first || !last) return;
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    modal.addEventListener("keydown", handleTabKey);
+
+    return () => {
+      modal.removeEventListener("keydown", handleTabKey);
+      previouslyFocusedElement?.focus();
+    };
+  }, []);
+
   if (!place) {
     return null;
   }
 
   return (
-    <div className="place-modal" onClick={onClose}>
+    <div
+      ref={modalRef}
+      className="place-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="place-modal-title"
+      onClick={onClose}
+    >
       <button
         className="place-modal__close"
         onClick={onClose}
@@ -98,7 +150,9 @@ const PlaceModal = ({ place, onClose }) => {
         />
 
         <div className="place-modal__details">
-          <h2 className="place-modal__title">{place.name}</h2>
+          <h2 id="place-modal-title" className="place-modal__title">
+            {place.name}
+          </h2>
           <p className="place-modal__category">{place.category}</p>
           <p className="place-modal__description">{place.description}</p>
         </div>

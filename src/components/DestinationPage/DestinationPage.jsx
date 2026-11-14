@@ -39,32 +39,28 @@ const getWeatherDescription = (code) => {
 const DestinationPage = () => {
   const { destinationId } = useParams();
 
-  const [destinationCoordinates, setDestinationCoordinates] = useState(null);
-  const [weather, setWeather] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
-  const [weatherError, setWeatherError] = useState(false);
+  const [loadedData, setLoadedData] = useState(null);
 
   const destination = destinations.find((item) => item.id === destinationId);
 
+  const requestId = `${destinationId}-${retryCount}`;
+
+  const currentData = loadedData?.requestId === requestId ? loadedData : null;
+
+  const isLoading = Boolean(destination) && !currentData;
+
   useEffect(() => {
+    if (!destination) return;
+
     let isActive = true;
 
-    if (!destination) {
-      setIsLoading(false);
-      return () => {
-        isActive = false;
-      };
-    }
+    const fetchDestinationData = async () => {
+      let coordinates = null;
+      let weather = null;
+      let error = false;
+      let weatherError = false;
 
-    setIsLoading(true);
-    setError(false);
-    setWeatherError(false);
-    setWeather(null);
-    setDestinationCoordinates(null);
-
-    const fetchDestinationCoordinates = async () => {
       try {
         const location = await getPlaceCoordinates(
           destination.name,
@@ -73,46 +69,47 @@ const DestinationPage = () => {
 
         if (!isActive) return;
 
-        setDestinationCoordinates({
+        coordinates = {
           lat: location.lat,
           lon: location.lon,
-        });
+        };
 
         try {
           const weatherData = await getWeather(location.lat, location.lon);
 
-          if (isActive) {
-            setWeather(weatherData);
-            setWeatherError(false);
-          }
-        } catch (error) {
-          if (isActive) {
-            console.error("Unable to load weather:", error);
-            setWeatherError(true);
-          }
+          if (!isActive) return;
+
+          weather = weatherData;
+        } catch (weatherFetchError) {
+          if (!isActive) return;
+
+          console.error("Unable to load weather:", weatherFetchError);
+          weatherError = true;
         }
-      } catch (error) {
-        if (isActive) {
-          console.error(error);
-          setError(true);
-        }
+      } catch (coordinateError) {
+        if (!isActive) return;
+
+        console.error(coordinateError);
+        error = true;
       } finally {
         if (isActive) {
-          setIsLoading(false);
+          setLoadedData({
+            requestId,
+            coordinates,
+            weather,
+            error,
+            weatherError,
+          });
         }
       }
     };
 
-    fetchDestinationCoordinates();
+    fetchDestinationData();
 
     return () => {
       isActive = false;
     };
-  }, [destinationId, retryCount]);
-
-  if (isLoading) {
-    return <Preloader />;
-  }
+  }, [destination, requestId]);
 
   if (!destination) {
     return (
@@ -139,6 +136,10 @@ const DestinationPage = () => {
     );
   }
 
+  if (isLoading) {
+    return <Preloader />;
+  }
+
   return (
     <main className="destination-page">
       <Hero
@@ -147,7 +148,7 @@ const DestinationPage = () => {
         image={destination.image}
       />
 
-      {error && (
+      {currentData.error && (
         <div className="destination-page__error">
           <p role="alert">
             We couldn't load the map for this destination. Please try again.
@@ -168,30 +169,33 @@ const DestinationPage = () => {
           <p>{destination.overview}</p>
         </section>
 
-        {(weather || weatherError) && (
+        {(currentData.weather || currentData.weatherError) && (
           <section className="destination-page__weather">
-            {weatherError && (
+            {currentData.weatherError && (
               <p className="destination-page__weather-error" role="alert">
                 Weather information is currently unavailable. Please try again
                 later.
               </p>
             )}
-            {weather && (
+
+            {currentData.weather && (
               <div className="weather-card">
                 <h2 className="weather-card__title">Current Weather</h2>
 
                 <p className="weather-card__condition">
-                  {getWeatherDescription(weather.weather_code)}
+                  {getWeatherDescription(currentData.weather.weather_code)}
                 </p>
 
                 <p className="weather-card__temperature">
-                  {weather.temperature_2m}°C
+                  {currentData.weather.temperature_2m}°C
                 </p>
 
                 <div className="weather-card__details">
-                  <p>Feels like: {weather.apparent_temperature}°C</p>
-                  <p>Humidity: {weather.relative_humidity_2m}%</p>
-                  <p>Wind: {weather.wind_speed_10m} km/h</p>
+                  <p>
+                    Feels like: {currentData.weather.apparent_temperature}°C
+                  </p>
+                  <p>Humidity: {currentData.weather.relative_humidity_2m}%</p>
+                  <p>Wind: {currentData.weather.wind_speed_10m} km/h</p>
                 </div>
               </div>
             )}
@@ -204,9 +208,9 @@ const DestinationPage = () => {
         destinationName={destination.name}
       />
 
-      {destinationCoordinates && (
+      {currentData.coordinates && (
         <iframe
-          src={`https://www.google.com/maps?q=${destinationCoordinates.lat},${destinationCoordinates.lon}&output=embed`}
+          src={`https://www.google.com/maps?q=${currentData.coordinates.lat},${currentData.coordinates.lon}&output=embed`}
           title={`Map showing ${destination.name}`}
           loading="lazy"
           className="destination-page__map"
