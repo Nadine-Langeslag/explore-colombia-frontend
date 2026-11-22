@@ -4,12 +4,10 @@ import { useEffect, useState } from "react";
 
 import PlaceCard from "../PlaceCard/PlaceCard.jsx";
 import places from "../../data/places.js";
-import PlaceModal from "../PlaceModal/PlaceModal.jsx";
 import { getPlaceCoordinates } from "../../utils/api.js";
 import Preloader from "../Preloader/Preloader.jsx";
 
 const Places = ({ destinationId, destinationName }) => {
-  const [selectedPlace, setSelectedPlace] = useState(null);
   const [placesWithCoordinates, setPlacesWithCoordinates] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -89,22 +87,9 @@ const Places = ({ destinationId, destinationName }) => {
 
       <section className="places">
         {placesWithCoordinates.map((place) => (
-          <PlaceCard
-            key={place.id}
-            place={place}
-            onOpen={(place) => {
-              setSelectedPlace(place);
-            }}
-          />
+          <PlaceCard key={place.id} place={place} />
         ))}
       </section>
-
-      {selectedPlace && (
-        <PlaceModal
-          place={selectedPlace}
-          onClose={() => setSelectedPlace(null)}
-        />
-      )}
     </>
   );
 };

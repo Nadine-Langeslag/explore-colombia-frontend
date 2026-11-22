@@ -1,10 +1,28 @@
 import "./destinationCard.css";
-import { useState } from "react";
+
 import { Bookmark } from "lucide-react";
 import { Link } from "react-router-dom";
 
+import { useSavedItems } from "../../contexts/useSavedItems.js";
+
 const DestinationCard = ({ destination }) => {
-  const [isSaved, setIsSaved] = useState(false);
+  const { isItemSaved, saveItem, removeSavedItem, getSavedItemId } =
+    useSavedItems();
+
+  const isSaved = isItemSaved(destination.id, "destination");
+
+  const handleSaveClick = async () => {
+    try {
+      if (isSaved) {
+        const savedItemId = getSavedItemId(destination.id, "destination");
+        await removeSavedItem(savedItemId);
+      } else {
+        await saveItem(destination.id, "destination");
+      }
+    } catch (error) {
+      console.error("Unable to update saved items:", error);
+    }
+  };
 
   return (
     <article className="destination-card">
@@ -12,7 +30,7 @@ const DestinationCard = ({ destination }) => {
         className={`destination-card__save-button ${
           isSaved ? "destination-card__save-button_saved" : ""
         }`}
-        onClick={() => setIsSaved(!isSaved)}
+        onClick={handleSaveClick}
         aria-label={isSaved ? "Remove from saved places" : "Save place"}
         aria-pressed={isSaved}
       >

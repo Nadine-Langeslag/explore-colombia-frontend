@@ -2,15 +2,17 @@
 
 Explore Colombia is a travel discovery web application that helps users explore destinations and places of interest across Colombia.
 
-The project combines destination information with interactive features and external APIs to make discovering places easier.
+The application combines destination information with interactive features, external APIs, and a backend service that supports user authentication, saved places, and shared visitor experiences.
 
 ## Features
 
 - **Explore destinations:** Browse destinations across Colombia.
 - **Discover places:** Explore attractions and points of interest within each destination.
 - **Search:** Find destinations and attractions by name.
-- **Save destinations:** Bookmark destinations for quick access.
-- **Weather information:** View current weather conditions for each destination.
+- **Save destinations and attractions:** Bookmark places and access them from a personal saved list.
+- **User authentication:** Register, sign in, and access protected features.
+- **Shared experiences:** Read, create, edit, and delete visitor experiences. Users must save an item before sharing an experience.
+- **Weather information:** View current weather conditions for destinations.
 - **Interactive maps:** View locations on a map and discover nearby places.
 - **Responsive design:** Adapted for desktop and mobile screens.
 
@@ -25,10 +27,11 @@ The project combines destination information with interactive features and exter
 
 ## APIs
 
-This project uses the following external APIs:
+The application uses the following external APIs:
 
 - [Geoapify](https://www.geoapify.com/) — Geocoding, location data, nearby places, and maps.
 - [Open-Meteo](https://open-meteo.com/) — Current weather information.
+- Explore Colombia Backend API — User authentication, saved items, and shared experiences.
 
 ## Getting Started
 
@@ -37,6 +40,7 @@ This project uses the following external APIs:
 - Node.js
 - npm
 - A Geoapify API key
+- A running instance of the Explore Colombia backend
 
 ### Installation
 
@@ -52,7 +56,7 @@ This project uses the following external APIs:
    cd explore-colombia-frontend
    ```
 
-3. Install the dependencies:
+3. Install dependencies:
 
    ```bash
    npm install
@@ -60,15 +64,22 @@ This project uses the following external APIs:
 
 ### Environment Variables
 
-Create a `.env` file in the root directory and add your Geoapify API key:
+Create a `.env.local` file in the project root and configure the following variables:
 
 ```env
 VITE_GEOAPIFY_API_KEY=your_api_key_here
+VITE_API_URL=http://localhost:3000/api
 ```
 
-Replace `your_api_key_here` with your actual Geoapify API key.
+Replace `your_api_key_here` with your Geoapify API key.
 
-**Note:** Keep your `.env` file private. Do not commit API keys or other secrets to the repository.
+For production, configure `VITE_API_URL` to point to the deployed backend:
+
+```env
+VITE_API_URL=https://api.explore-colombia.mooo.com/api
+```
+
+Keep API keys and other private credentials out of version control. Never commit your private environment files.
 
 ### Run the Development Server
 
@@ -78,19 +89,15 @@ Start the application locally:
 npm run dev
 ```
 
-Vite will open the application in your browser.
+Vite will start the development server. The frontend requires the backend to be running for authentication, saved items, and experiences.
 
 ### Build for Production
-
-To create a production build:
 
 ```bash
 npm run build
 ```
 
 ### Run ESLint
-
-To check the project for linting issues:
 
 ```bash
 npm run lint
@@ -101,6 +108,7 @@ npm run lint
 ```text
 src/
 ├── components/
+├── contexts/
 ├── data/
 ├── images/
 ├── pages/
@@ -115,6 +123,6 @@ Photograph sources, photographers, and applicable licenses are documented in [IM
 
 ## Project Status
 
-Explore Colombia is being developed as part of the TripleTen Full Stack Web Development program.
+Explore Colombia is a full-stack project developed as part of the TripleTen Full Stack Web Development program.
 
-The current stage focuses on the React frontend and integration with external APIs. Backend functionality and authorization are planned for later development stages.
+The application includes a React frontend, external API integrations, and a backend API with authentication, saved items, and shared visitor experiences.

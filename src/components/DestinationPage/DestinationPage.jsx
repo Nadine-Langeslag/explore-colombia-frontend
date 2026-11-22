@@ -9,6 +9,7 @@ import destinations from "../../data/destinations.js";
 import Hero from "../Hero/Hero.jsx";
 import Places from "../Places/Places.jsx";
 import Preloader from "../Preloader/Preloader.jsx";
+import Experiences from "../Experiences/Experiences.jsx";
 
 const getWeatherDescription = (code) => {
   const weatherConditions = {
@@ -207,6 +208,8 @@ const DestinationPage = () => {
         destinationId={destination.id}
         destinationName={destination.name}
       />
+
+      <Experiences itemId={destination.id} itemType="destination" />
 
       {currentData.coordinates && (
         <iframe

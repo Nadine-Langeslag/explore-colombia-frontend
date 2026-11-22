@@ -46,17 +46,90 @@
   color: #ffffff;
 }
 
+.hero_clickable {
+  cursor: zoom-in;
+}
+
+.hero__image-trigger {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.hero__image-trigger:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: -4px;
+}
+
+.hero__content {
+  pointer-events: none;
+}
+
+.hero__lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  background-color: rgba(0, 0, 0, 0.9);
+  cursor: zoom-out;
+}
+
+.hero__lightbox-image {
+  display: block;
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 6px;
+  cursor: default;
+}
+.hero__lightbox-container {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 100%;
+  max-height: 90vh;
+}
+.hero__lightbox-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  width: 88px;
+  height: 88px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background: rgba(0, 0, 0, 0.65);
+  border: none;
+  border-radius: 50%;
+  font-size: 36px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.hero__lightbox-close:hover {
+  color: var(--color-accent);
+}
+
 @media (max-width: 600px) {
-  .hero {
-    min-height: 300px;
-    padding: 32px 20px;
+  .hero__lightbox {
+    padding: 16px;
   }
 
-  .hero__title {
-    font-size: 36px;
-  }
-
-  .hero__subtitle {
-    font-size: 16px;
+  .hero__lightbox-close {
+    top: 12px;
+    right: 12px;
   }
 }

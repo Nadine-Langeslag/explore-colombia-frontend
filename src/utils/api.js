@@ -1,3 +1,23 @@
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+
+export const request = async (path, options = {}) => {
+  const response = await fetch(`${BASE_URL}${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data.message || "Something went wrong");
+  }
+
+  return data;
+};
+
 const GEOAPIFY_API_KEY = import.meta.env.VITE_GEOAPIFY_API_KEY;
 
 export const getPlaceCoordinates = async (placeName, city) => {
@@ -78,4 +98,69 @@ export const getWeather = async (lat, lon) => {
   const data = await response.json();
 
   return data.current;
+};
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("token");
+
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
+export const getExperiences = async (itemId, itemType) => {
+  const { data } = await request(`/experiences/${itemType}/${itemId}`, {
+    headers: getAuthHeaders(),
+  });
+
+  return data;
+};
+
+export const createExperience = async (itemId, itemType, text) => {
+  const { data } = await request(`/experiences/${itemType}/${itemId}`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ text }),
+  });
+
+  return data;
+};
+
+export const editExperience = async (experienceId, text) => {
+  const { data } = await request(`/experiences/${experienceId}`, {
+    method: "PATCH",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ text }),
+  });
+
+  return data;
+};
+
+export const deleteExperience = async (experienceId) => {
+  return request(`/experiences/${experienceId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+};
+
+export const getSavedItems = async () => {
+  const { data } = await request("/saved-destinations", {
+    headers: getAuthHeaders(),
+  });
+
+  return data;
+};
+
+export const saveItem = async (itemId, itemType) => {
+  const { data } = await request("/saved-destinations", {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ itemId, itemType }),
+  });
+
+  return data;
+};
+
+export const removeSavedItem = async (savedItemId) => {
+  return request(`/saved-destinations/${savedItemId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
 };
