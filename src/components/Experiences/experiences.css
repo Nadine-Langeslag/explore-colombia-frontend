@@ -1,3 +1,8 @@
+.experiences {
+  width: calc(100% - 64px);
+  max-width: 1000px;
+  margin: 40px auto;
+}
 .experience {
   display: flex;
   flex-direction: column;
@@ -253,7 +258,9 @@
 
 @media screen and (max-width: 480px) {
   .experiences {
+    width: 100%;
     padding: 0 16px;
+    box-sizing: border-box;
   }
 
   .experiences__list {
