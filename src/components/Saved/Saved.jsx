@@ -7,7 +7,7 @@ import DestinationCard from "../../components/DestinationCard/DestinationCard.js
 import PlaceCard from "../../components/PlaceCard/PlaceCard.jsx";
 import { useAuth } from "../../contexts/useAuth.js";
 import Hero from "../Hero/Hero.jsx";
-import heroImage from "../../images/hero/hero-cocora-valley.jpg";
+import heroImage from "../../images/hero/magdalena-river-hero.jpg";
 
 const Saved = () => {
   const { savedItems, isLoading } = useSavedItems();

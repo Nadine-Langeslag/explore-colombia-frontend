@@ -1,8 +1,11 @@
 import "./footer.css";
+import footerIllustration from "../../images/footer/colombia-footer-illustration.png";
 
 const Footer = () => {
   return (
     <footer className="footer">
+      <img className="footer__illustration" src={footerIllustration} alt="" />
+
       <section className="footer__message">
         <h2 className="footer__title">Travel responsibly</h2>
         <p className="footer__text">
