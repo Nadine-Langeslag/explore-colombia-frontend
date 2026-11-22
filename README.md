@@ -2,6 +2,8 @@
 
 Explore Colombia is a travel discovery web application that helps users explore destinations and places of interest across Colombia.
 
+**[Visit the live application](https://explore-colombia.mooo.com/)**
+
 The application combines destination information with interactive features, external APIs, and a backend service that supports user authentication, saved places, and shared visitor experiences.
 
 ## Features
