@@ -5,6 +5,7 @@ import { AuthProvider } from "./contexts/AuthContext.jsx";
 import { SavedItemsProvider } from "./contexts/SavedItemsContext.jsx";
 
 import "./index.css";
+import "@fontsource-variable/lora";
 
 import App from "./App.jsx";
 

@@ -11,8 +11,8 @@
   --color-accent: #c49a4a;
   --color-border: #dedbd2;
 
-  --font-main: Arial, sans-serif;
-  --font-heading: Georgia, serif;
+  --font-main: "Lora", serif;
+  --font-heading: "Lora", serif;
 
   font-family: var(--font-main);
   color: var(--color-text);
