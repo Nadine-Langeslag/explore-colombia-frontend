@@ -1,0 +1,273 @@
+.experiences {
+  width: calc(100% - 64px);
+  max-width: 1000px;
+  margin: 40px auto;
+}
+.experience {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: #fff;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.experience:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.experience__text {
+  margin: 0 0 20px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.experience__author {
+  margin: auto 0 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.experience__date {
+  display: block;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.experience__edit-button,
+.experience__delete-button {
+  padding: 7px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.experience__edit-button {
+  margin-right: 8px;
+  background-color: #f8f6f0;
+  color: var(--text);
+}
+
+.experience__edit-button:hover {
+  background-color: var(--color-accent);
+  color: white;
+}
+
+.experience__delete-button {
+  background-color: white;
+  color: #b42318;
+}
+
+.experience__delete-button:hover {
+  background-color: #b42318;
+  color: white;
+}
+
+.experience__edit-button:disabled,
+.experience__delete-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.experiences__title {
+  margin-bottom: 24px;
+  font-size: 1.8rem;
+}
+
+.experiences__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 30px;
+  padding: 24px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: #f8f6f0;
+}
+
+.experiences__form label {
+  font-weight: 600;
+}
+
+.experiences__textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font: inherit;
+  resize: vertical;
+}
+
+.experiences__form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.experiences__char-count {
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.experiences__submit,
+.experiences__show-more {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--color-accent);
+  color: white;
+  font: inherit;
+  cursor: pointer;
+}
+
+.experiences__submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.experiences__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.experience {
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: #fff;
+}
+
+.experience__text {
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.experience__date {
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.experiences__show-more {
+  display: block;
+  margin: 24px auto 0;
+}
+
+.experiences__error {
+  color: #b42318;
+}
+
+.experiences__empty {
+  margin: 20px 0;
+  color: var(--text);
+}
+
+.experience__actions,
+.experience__edit-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.experience__edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.experience__edit-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: #fff;
+  font: inherit;
+  resize: vertical;
+}
+
+.experience__edit-button,
+.experience__delete-button,
+.experience__save-button,
+.experience__cancel-button {
+  width: auto;
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.experience__edit-button,
+.experience__cancel-button {
+  background-color: #f8f6f0;
+  color: var(--text);
+}
+
+.experience__edit-button:hover,
+.experience__cancel-button:hover {
+  background-color: #eeeae0;
+}
+
+.experience__delete-button {
+  background-color: white;
+  color: #b42318;
+}
+
+.experience__delete-button:hover {
+  background-color: #fdf0ef;
+}
+
+.experience__save-button {
+  background-color: var(--color-accent);
+  color: white;
+}
+
+.experience__save-button:hover {
+  opacity: 0.85;
+}
+
+.experience__edit-button:disabled,
+.experience__delete-button:disabled,
+.experience__save-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media screen and (max-width: 768px) {
+  .experiences__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .experiences {
+    width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
+  }
+
+  .experiences__list {
+    grid-template-columns: 1fr;
+  }
+
+  .experiences__form {
+    padding: 18px;
+  }
+}

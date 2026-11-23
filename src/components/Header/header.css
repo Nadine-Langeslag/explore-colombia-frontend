@@ -1,0 +1,25 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: var(--color-background);
+  border-bottom: 2px solid var(--color-accent);
+}
+
+.header__logo {
+  width: 180px;
+  height: auto;
+  display: block;
+}
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px 20px;
+  }
+
+  .header__logo {
+    width: 150px;
+  }
+}
